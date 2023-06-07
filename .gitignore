@@ -1,5 +1,5 @@
 # specific files
-*_ms1_*
+ms1_frames.parquet
 poster.ipynb
 
 # macOS
