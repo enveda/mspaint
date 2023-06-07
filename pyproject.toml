@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "mspaint"
+version = "0.0.1"
+description = "multi-engine painting of mass spec data"
+authors = ["Shaurya Chanana <15051933+chanana@users.noreply.github.com>", "John T. Prince"]
+readme = "README.md"
+license = "GNU General Public License v2.0"
+packages = [{include = "mspaint"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0.0"
+numpy = "^1.23.1"
+holoviews = "^1.16.0"
+plotly = "^5.14.1"
+bokeh = "^3.1.1"
+matplotlib = "^3.7.1"
+pyparsing = "^3.0.9"
+pyarrow = "^12.0.0"
+kaleido = "0.2.1" # for plotly svg saves
+selenium = "^4.9.1" # for bokeh png saves
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.0.3"
+ipython = "^8.9.0"
+ruff = "^0.0.267"
+ipykernel = "^6.23.1"
+deptry = "^0.11.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.1"
+snapshottest = "^0.6.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "tests/**/snapshots",
+    "notebooks",
+    "example_data/"
+]
