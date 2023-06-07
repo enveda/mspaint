@@ -1,5 +1,6 @@
-# specific parquet files
+# specific files
 *_ms1_*
+poster.ipynb
 
 # macOS
 .DS_Store
