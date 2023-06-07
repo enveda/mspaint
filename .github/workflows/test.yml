@@ -1,0 +1,58 @@
+name: test
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: cache poetry install
+        id: cached-poetry-install
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: poetry-1.3.2
+
+      - name: install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.3.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+        if: steps.cached-poetry-install.outputs.cache-hit != 'true'
+
+      - name: Load pre-commit-cache
+        id: pre-commit-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ matrix.python-version }}-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Load poetry-venv-cache
+        id: cached-poetry-venv
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-python-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        run: |
+          poetry install --with dev,test,plotly,bokeh --no-interaction
+        if: steps.cached-poetry-venv.outputs.cache-hit != 'true'
+
+      - name: Check with pre-commit
+        run: |
+          poetry run pre-commit install
+          poetry run pre-commit run --all-files
+      - name: Test with pytest
+        run: |
+          poetry run pytest -m 'not e2e' -v
