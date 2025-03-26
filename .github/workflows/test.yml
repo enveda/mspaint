@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v3
 
@@ -20,12 +20,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: poetry-1.3.2
+          key: poetry-1.8.5
 
       - name: install poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.3.2
+          version: 1.8.5
           virtualenvs-create: true
           virtualenvs-in-project: true
         if: steps.cached-poetry-install.outputs.cache-hit != 'true'
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry install --with dev,test,plotly,bokeh --no-interaction
+          poetry install --with dev,test --no-interaction
         if: steps.cached-poetry-venv.outputs.cache-hit != 'true'
 
       - name: Check with pre-commit
