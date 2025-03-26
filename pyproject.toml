@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mspaint"
-version = "0.0.1"
+version = "0.1.0"
 description = "multi-engine painting of mass spec data"
 authors = ["Shaurya Chanana", "John T. Prince"]
 readme = "README.md"
