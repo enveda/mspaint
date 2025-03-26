@@ -8,26 +8,26 @@ license = "GNU General Public License v2.0"
 packages = [{include = "mspaint"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8.1,<4.0.0"
-numpy = "^1.22.2"
-holoviews = "^1.16.0"
-plotly = "^5.14.1"
-bokeh = "^3.1.1"
-matplotlib = "^3.7.1"
+python = ">=3.10,<4.0.0"
+numpy = "^2"
+holoviews = "^1"
+plotly = "^5"
+bokeh = "^3"
+matplotlib = "^3"
 pyparsing = "^3.0.9"
-pyarrow =">=14.0.1,<17"
+pyarrow ="^16"
 kaleido = "0.2.1" # for plotly svg saves
 selenium = "^4.9.1" # for bokeh png saves
+nbformat = "^5.10.4"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^3.0.3"
-ipython = "^8.9.0"
-ruff = "^0.0.267"
-ipykernel = "^6.23.1"
-deptry = "^0.11.0"
+pre-commit = "^3"
+ruff = "^0"
+ipykernel = "^6"
+deptry = "^0"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^7.2.1"
+pytest = "^7"
 snapshottest = "^0.6.0"
 
 [build-system]

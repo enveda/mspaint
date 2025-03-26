@@ -1,5 +1,4 @@
 import logging
-from textwrap import dedent
 from typing import Literal, Tuple
 
 import holoviews as hv
@@ -17,16 +16,14 @@ logger = logging.getLogger(__name__)
 class Plotter:
     ENGINES = ("bokeh", "matplotlib", "plotly")
 
-    def __init__(self, plotting_engine: Literal[ENGINES]):
+    def __init__(self, plotting_engine: Literal["bokeh", "matplotlib", "plotly"]):
         self.plotting_engine = plotting_engine
         if self.check_valid_plotting_engine():
             self.set_plotting_engine()
         else:
             raise ValueError(
-                dedent(
-                    f"Plotting engine {self.plotting_engine} is not valid. "
-                    f"Please choose from: {self.ENGINES}"
-                )
+                f"Plotting engine {self.plotting_engine} is not valid. "
+                f"Please choose from: {self.ENGINES}"
             )
 
     def set_plotting_engine(self):
@@ -64,17 +61,14 @@ class Plotter:
             mzs_on_bottom, intensities_on_bottom, mzs_on_top, intensities_on_top
         )
 
-        plot = (
-            hv.Curve(
-                (mzs_on_top, intensities_on_top), "m/z", "intensity", label=label_top
-            )
-            * hv.Curve(
-                (mzs_on_bottom, intensities_on_bottom),
-                "m/z",
-                "intensity",
-                label=label_bottom,
-            ).opts(title=title, xlim=xaxis_range)
-        )
+        plot = hv.Curve(
+            (mzs_on_top, intensities_on_top), "m/z", "intensity", label=label_top
+        ) * hv.Curve(
+            (mzs_on_bottom, intensities_on_bottom),
+            "m/z",
+            "intensity",
+            label=label_bottom,
+        ).opts(title=title, xlim=xaxis_range)
 
         if self.get_plotting_engine() == "plotly":
             plot *= hv.HLine(0)
@@ -87,41 +81,31 @@ class Plotter:
         # check if range is too wide and warn user
         if mz_range[1] - mz_range[0] > 0.01:
             logger.warning(
-                dedent(
-                    f"\nmz_range is very wide. We recommend using a range < 0.01 Da. \
+                f"mz_range is very wide. We recommend using a range < 0.01 Da. \
                 Using given range {mz_range} to make plot."
-                )
             )
 
     def check_mz_range_and_value(
-        self, mz_range: Tuple[float, float], mz_value: float, mz_tolerance: float
+        self,
+        mz_range: Tuple[float, float] | None,
+        mz_value: float | None,
+        mz_tolerance: float,
     ) -> Tuple[float, float]:
-        if mz_range is None:
-            if mz_value is None:  # both none, raise exception
-                raise ValueError(
-                    dedent(
-                        """\nBoth mz_range and mz_value are None. \
-                            Please provide one or the other."""
-                    )
-                )
-            else:  # range none, value given, use it
-                mz_range = (mz_value - mz_tolerance, mz_value + mz_tolerance)
-        if mz_range is not None and mz_value is not None:  # if both are given
-            logger.warning(
-                dedent(
-                    f"""\nBoth mz_range and mz_value were given. \
-                        Using mz_range {mz_range} to make plot."""
-                )
+        if mz_range is not None:
+            if mz_value is not None:
+                logger.warning("Both mz_range and mz_value were given. Using mz_range.")
+            return mz_range
+        elif mz_value is not None:
+            return (mz_value - mz_tolerance, mz_value + mz_tolerance)
+        else:
+            raise ValueError(
+                "Both mz_range and mz_value are None. Please provide one or the other."
             )
-        return mz_range
 
     def check_aggregated_dataframe(self, aggregated_dataframe, mz_range):
         if aggregated_dataframe.empty:
             raise ValueError(
-                dedent(
-                    f"""\nNo data found in mz_range {mz_range}. \
-                        Please check your mz_range."""
-                )
+                f"No data found in mz_range {mz_range}. Please check your mz_range."
             )
 
     def aggregated_plot_setup(
