@@ -89,13 +89,17 @@ class Plotter:
         self,
         mz_range: Tuple[float, float] | None,
         mz_value: float | None,
-        mz_tolerance: float,
+        mz_tolerance: float | None,
     ) -> Tuple[float, float]:
         if mz_range is not None:
             if mz_value is not None:
                 logger.warning("Both mz_range and mz_value were given. Using mz_range.")
             return mz_range
         elif mz_value is not None:
+            if mz_tolerance is None:
+                raise ValueError(
+                    "mz_tolerance must be specified when mz_value is provided."
+                )
             return (mz_value - mz_tolerance, mz_value + mz_tolerance)
         else:
             raise ValueError(
@@ -130,11 +134,17 @@ class Plotter:
         xic_dataframe: pd.DataFrame,
         mz_range: Tuple[float, float] = None,
         mz_value: float = None,
-        mz_tolerance: float = 0.005,
+        mz_tolerance: float | None = None,
         rt_column: str = "rt",
         intensity_column: str = "intensity",
         mz_column: str = "mz",
     ):
+        """Plot an extracted ion chromatogram.
+
+        When ``mz_value`` is supplied ``mz_tolerance`` must also be provided
+        to specify the range around the given m/z. Alternatively, specify a
+        custom ``mz_range`` directly.
+        """
         mz_range = self.check_mz_range_and_value(mz_range, mz_value, mz_tolerance)
         self.check_mz_range_width(mz_range)
 
