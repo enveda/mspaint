@@ -1,37 +1,48 @@
-[tool.poetry]
+[project]
 name = "mspaint"
 version = "0.1.0"
 description = "multi-engine painting of mass spec data"
-authors = ["Shaurya Chanana", "John T. Prince"]
+authors = [
+    { name = "Shaurya Chanana" },
+    { name = "John T. Prince" },
+]
+requires-python = ">=3.10,<3.12"
 readme = "README.md"
-license = "GNU General Public License v2.0"
-packages = [{include = "mspaint"}]
+license = "GPL-2.0"
+dependencies = [
+    "numpy>=2,<3",
+    "holoviews>=1,<2",
+    "plotly>=5,<6",
+    "bokeh>=3,<4",
+    "matplotlib>=3,<4",
+    "pyparsing>=3.0.9,<4",
+    "pyarrow>=16,<17",
+    "kaleido==0.2.1",
+    "selenium>=4.9.1,<5",
+    "nbformat>=5.10.4,<6",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<3.12"
-numpy = "^2"
-holoviews = "^1"
-plotly = "^5"
-bokeh = "^3"
-matplotlib = "^3"
-pyparsing = "^3.0.9"
-pyarrow ="^16"
-kaleido = "0.2.1" # for plotly svg saves
-selenium = "^4.9.1" # for bokeh png saves
-nbformat = "^5.10.4"
+[dependency-groups]
+dev = [
+    "pre-commit>=3,<4",
+    "ruff>=0,<1",
+    "ipykernel>=6,<7",
+    "pytest>=7,<8",
+    "snapshottest>=0.6.0,<0.7",
+]
 
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^3"
-ruff = "^0"
-ipykernel = "^6"
+[tool.uv]
+default-groups = ["dev", ]
 
-[tool.poetry.group.test.dependencies]
-pytest = "^7"
-snapshottest = "^0.6.0"
+[tool.hatch.build.targets.sdist]
+include = ["mspaint"]
+
+[tool.hatch.build.targets.wheel]
+include = ["mspaint"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
