@@ -11,8 +11,8 @@
 #### Setup
 ```shell
 git clone https://github.com/enveda/mspaint.git
-poetry install --with dev,test
-poetry run pre-commit install
+uv sync --all-groups
+uv run pre-commit install
 ```
 
 #### Contribution
@@ -20,6 +20,6 @@ poetry run pre-commit install
 ```shell
 git checkout -b <relevant-sounding-branch-name>
 # make meaningful contributions
-poetry run pytest
+uv run pytest
 # open a PR
 ```
